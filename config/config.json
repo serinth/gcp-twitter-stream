@@ -1,0 +1,13 @@
+{
+  "pubsub": {
+    "host": "localhost",
+    "port": 8432,
+    "topic": "trumpisms"
+  },
+  "twitter": {
+    "track": ["trump"]
+  },
+  "gcp": {
+    "project": "dius-158701"
+  }
+}
