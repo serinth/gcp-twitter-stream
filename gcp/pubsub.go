@@ -8,12 +8,13 @@ import (
 	"golang.org/x/net/context"
 )
 
-func Handler() {
+func handler() {
 	ctx := context.Background()
 
 	config, _ := configuration.GetConfig()
 
-	client, err := pubsub.NewClient(ctx, config.GCP.Project)
+	// TODO do something with client instead of _
+	_, err := pubsub.NewClient(ctx, config.GCP.Project)
 
 	if err != nil {
 		log.Fatal("PubSub client could not be initialized")
