@@ -14,8 +14,6 @@ type Config struct {
 }
 
 type pubSubConfig struct {
-	Host  string `json:"host"`
-	Port  int    `json:"port"`
 	Topic string `json:"topic"`
 }
 

@@ -1,7 +1,5 @@
 {
   "pubsub": {
-    "host": "localhost",
-    "port": 8432,
     "topic": "trumpisms"
   },
   "twitter": {

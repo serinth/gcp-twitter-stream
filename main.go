@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -12,6 +11,7 @@ import (
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
 	configuration "github.com/serinth/gcp-twitter-stream/config"
+	"github.com/serinth/gcp-twitter-stream/gcp"
 )
 
 func main() {
@@ -38,20 +38,16 @@ func main() {
 
 	// Twitter Client
 	client := twitter.NewClient(httpClient)
+	pubSub := gcp.NewPubSub()
+	defer pubSub.Client.Close()
 
 	// Convenience Demux demultiplexed stream messages
 	demux := twitter.NewSwitchDemux()
 	demux.Tweet = func(tweet *twitter.Tweet) {
-		fmt.Println(tweet.Text)
-	}
-	demux.DM = func(dm *twitter.DirectMessage) {
-		fmt.Println(dm.SenderID)
-	}
-	demux.Event = func(event *twitter.Event) {
-		fmt.Printf("%#v\n", event)
+		pubSub.Send(tweet)
 	}
 
-	fmt.Println("Starting Stream...")
+	log.Println("Starting Stream...")
 
 	filterParams := &twitter.StreamFilterParams{
 		Track:         appConfig.Twitter.Track,
@@ -70,6 +66,6 @@ func main() {
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	log.Println(<-ch)
 
-	fmt.Println("Stopping Stream...")
+	log.Println("Stopping Stream...")
 	stream.Stop()
 }
