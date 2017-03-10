@@ -8,4 +8,4 @@ fi
 
 export PUBSUB_EMULATOR_HOST=localhost:$1
 go build .
-./gcp-twitter-stream.exe
+./subscriber.exe

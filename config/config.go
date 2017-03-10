@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
-	"os"
 )
 
 // Config for application
@@ -26,9 +25,8 @@ type gcpConfig struct {
 }
 
 // GetConfig returns system config
-func GetConfig() (Config, error) {
-	cwd, err := os.Getwd()
-	raw, err := ioutil.ReadFile(cwd + "/config/config.json")
+func GetConfig(filePath string) (Config, error) {
+	raw, err := ioutil.ReadFile(filePath)
 
 	var config Config
 	err = json.Unmarshal(raw, &config)

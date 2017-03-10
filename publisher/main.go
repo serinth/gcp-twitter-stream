@@ -27,10 +27,11 @@ func main() {
 		log.Fatal("Consumer key/secret and Access token/secret required")
 	}
 
-	appConfig, err := configuration.GetConfig()
+	appConfig, err := configuration.GetConfig("../config/config.json")
 	if err != nil {
 		log.Fatal("Could not get config from config.json")
 	}
+
 	config := oauth1.NewConfig(*consumerKey, *consumerSecret)
 	token := oauth1.NewToken(*accessToken, *accessSecret)
 	// OAuth1 http.Client will automatically authorize Requests
@@ -38,7 +39,7 @@ func main() {
 
 	// Twitter Client
 	client := twitter.NewClient(httpClient)
-	pubSub := gcp.NewPubSub()
+	pubSub := gcp.NewPublisher("../config/config.json")
 	defer pubSub.Client.Close()
 
 	// Convenience Demux demultiplexed stream messages

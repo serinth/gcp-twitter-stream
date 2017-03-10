@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+message Tweet {
+  string tweet = 1;
+  string ingestion_date = 2;
+  string name = 3;
+  string tweet_id = 4;
+}
+
