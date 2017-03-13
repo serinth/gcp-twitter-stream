@@ -7,4 +7,10 @@ ADD ../ca-certificates.crt /etc/ssl/certs/
 
 ADD publisher /
 
-ENTRYPOINT ["/publisher"]
+# Twitter credentials. For workshop purposes only. 
+ENV TWITTER_CONSUMER_KEY value
+ENV TWITTER_CONSUMER_SECRET value
+ENV TWITTER_ACCESS_TOKEN value
+ENV TWITTER_ACCESS_SECRET value
+
+ENTRYPOINT ["/publisher", ""]

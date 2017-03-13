@@ -35,11 +35,13 @@ Example project to implement the following architecture on GCP:
 - Golang 1.7+
 - Docker Native
 - Google Cloud account enabled
+- Twitter account
+- Twitter app credentials (https://apps.twitter.com)
 
 
 Replace <PORT> with the pubsub emulator port number.
 
-# WorkShop Instructions
+# Workshop Instructions
 
 This workshop will cover the following aspects of GCP:
 - Getting started with a GCP project layout
@@ -93,7 +95,18 @@ gcloud container clusters get-credentials dius-cluster
 
 ## Get The App Running Locally
 
-1. Clone this repository
+1. Setup Twitter environment variables in `~/.profile` or equivalent:
+
+```bash
+# Twitter Creds
+export TWITTER_CONSUMER_KEY= ...
+export TWITTER_CONSUMER_SECRET= ...
+export TWITTER_ACCESS_TOKEN= ...
+export TWITTER_ACCESS_SECRET= ...
+```
+
+Also put these values into the `publisher/Dockerfile`.
+
 2. Build locally:
 
 ```bash
@@ -120,10 +133,7 @@ cd publisher
 ```
 * Note: you may need to modify `start.sh` to reference the executable name
 
-5. Do the same thing for the Subscriber and make sure tweets are being pulled through the subscriber.
-
-
-## Build the Docker Containers
+## Build the Docker Containers and Push to GCR
 
 1. Statically link and build the executable for Linux
 
@@ -148,3 +158,23 @@ gcloud docker -- push asia.gcr.io/PROJECT_ID/trumplisher:v1
 ```
 
 You can view it on the web console.
+
+## Create the BigQuery Table
+
+1. First create a dataset and add it to our bqueryrc:
+
+```bash
+bq mk trump_data
+echo "dataset_id=trump_data" >> ~/.bigqueryrc
+```
+
+2. Now create the table:
+
+```bash
+bq mk --schema bq_tweets_schema.json -t trump_data.tweets
+```
+
+```bash
+bq head -n 10 PROJECT_ID:trump_data.tweets
+```
+

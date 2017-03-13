@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: trumplisher-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        name: trumplisher
+        environment: dev
+    spec:
+      containers:
+      - name: trumplisher
+        image: asia.gcr.io/PROJECT_ID/trumplisher:v1

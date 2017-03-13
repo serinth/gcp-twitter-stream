@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: trumpscriber-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        name: trumpscriber
+        environment: dev
+    spec:
+      containers:
+      - name: trumpscriber
+        image: asia.gcr.io/PROJECT_ID/trumpscriber:v1
