@@ -7,9 +7,10 @@ import (
 
 // Config for application
 type Config struct {
-	PubSub  pubSubConfig  `json:"pubsub"`
-	Twitter twitterConfig `json:"twitter"`
-	GCP     gcpConfig     `json:"gcp"`
+	PubSub   pubSubConfig   `json:"pubsub"`
+	Twitter  twitterConfig  `json:"twitter"`
+	GCP      gcpConfig      `json:"gcp"`
+	BigQuery bigQueryConfig `json:"bigQuery"`
 }
 
 type pubSubConfig struct {
@@ -22,6 +23,11 @@ type twitterConfig struct {
 
 type gcpConfig struct {
 	Project string `json:"project"`
+}
+
+type bigQueryConfig struct {
+	DatasetID string `json:"datasetId"`
+	TableID   string `json:"tableId"`
 }
 
 // GetConfig returns system config

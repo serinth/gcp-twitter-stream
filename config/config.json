@@ -6,6 +6,10 @@
     "track": ["trump"]
   },
   "gcp": {
-    "project": "dius-158701"
+    "project": "trumpisms-160122"
+  },
+  "bigQuery": {
+    "datasetId": "trump_data",
+    "tableId": "tweets"
   }
 }

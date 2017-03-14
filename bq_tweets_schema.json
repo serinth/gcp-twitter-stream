@@ -1,5 +1,5 @@
 [
-  {"name": "tweet_id", "type": "integer", "mode": "required"},
+  {"name": "tweet_id", "type": "string", "mode": "required"},
   {"name": "name", "type": "string", "mode": "nullable"},
   {"name": "tweet", "type": "string", "mode": "nullable"},
   {"name": "ingestion_date", "type": "datetime", "mode": "required"}

@@ -40,7 +40,7 @@ func (p *Publisher) Send(tweet *twitter.Tweet) {
 
 	msg := &tweetpb.Tweet{
 		TweetId:       strconv.FormatInt(tweet.ID, 10),
-		IngestionDate: time.Now().String(),
+		IngestionDate: time.Now().Format("2006-01-02 15:04:05"),
 		Name:          tweet.User.Name,
 		Tweet:         tweet.Text,
 	}
@@ -50,10 +50,7 @@ func (p *Publisher) Send(tweet *twitter.Tweet) {
 	if err != nil {
 		log.Println("Error converting to binary for pub/sub: ", err)
 	} else {
-		_, err = topic.Publish(p.context, &pubsub.Message{Data: serializedMessage})
-		if err != nil {
-			log.Println("Failed to send to topic witih error: ", err)
-		}
+		_ = topic.Publish(p.context, &pubsub.Message{Data: serializedMessage})
 	}
 
 }

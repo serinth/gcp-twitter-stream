@@ -3,6 +3,7 @@ package gcp
 import (
 	"log"
 
+	"cloud.google.com/go/bigquery"
 	"cloud.google.com/go/pubsub"
 	"github.com/golang/protobuf/proto"
 	configuration "github.com/serinth/gcp-twitter-stream/config"
@@ -16,6 +17,7 @@ type Subscriber struct {
 	context     context.Context
 	subcription pubsub.Subscription
 	config      configuration.Config
+	BQClient    bigquery.Client
 }
 
 // NewSubscriber creates a subscriber class to listen on a topic
@@ -23,7 +25,8 @@ func NewSubscriber(configPath string) *Subscriber {
 	ctx := context.Background()
 	config, _ := configuration.GetConfig(configPath)
 	pubsubClient, _ := pubsub.NewClient(ctx, config.GCP.Project)
-	return &Subscriber{Client: *pubsubClient, context: ctx, config: config}
+	bqClient, _ := bigquery.NewClient(ctx, config.GCP.Project)
+	return &Subscriber{Client: *pubsubClient, context: ctx, config: config, BQClient: *bqClient}
 }
 
 // Subscribe to a topic. Creates a subscription if one doesn't exist
@@ -72,7 +75,9 @@ func (s *Subscriber) ListenAndHandle() {
 		if err != nil {
 			log.Println("Failed to deserialize message: ", err)
 		} else {
+
 			log.Println("Got Message: ", tweet.String())
+			s.insertRow(tweet)
 		}
 
 		message.Done(true)
