@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: trumplisher-deployment
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -12,4 +12,4 @@ spec:
     spec:
       containers:
       - name: trumplisher
-        image: asia.gcr.io/PROJECT_ID/trumplisher:v1
+        image: asia.gcr.io/<PROJECT ID>/trumplisher:v3

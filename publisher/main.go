@@ -39,6 +39,7 @@ func main() {
 
 	// Twitter Client
 	client := twitter.NewClient(httpClient)
+
 	pubSub := gcp.NewPublisher("../config/config.json")
 	defer pubSub.Client.Close()
 

@@ -25,7 +25,13 @@ type Publisher struct {
 func NewPublisher(configPath string) *Publisher {
 	ctx := context.Background()
 	config, _ := configuration.GetConfig(configPath)
-	pubsubClient, _ := pubsub.NewClient(ctx, config.GCP.Project)
+
+	pubsubClient, err := pubsub.NewClient(ctx, config.GCP.Project)
+
+	if err != nil {
+		log.Fatal("Could not create pubsub client: ", err)
+	}
+
 	return &Publisher{Client: *pubsubClient, context: ctx, config: config}
 }
 

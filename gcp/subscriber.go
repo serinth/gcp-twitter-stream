@@ -24,8 +24,18 @@ type Subscriber struct {
 func NewSubscriber(configPath string) *Subscriber {
 	ctx := context.Background()
 	config, _ := configuration.GetConfig(configPath)
-	pubsubClient, _ := pubsub.NewClient(ctx, config.GCP.Project)
-	bqClient, _ := bigquery.NewClient(ctx, config.GCP.Project)
+	pubsubClient, err := pubsub.NewClient(ctx, config.GCP.Project)
+
+	if err != nil {
+		log.Fatal("Could not create pubsub Client with error: ", err)
+	}
+
+	bqClient, bqerr := bigquery.NewClient(ctx, config.GCP.Project)
+
+	if bqerr != nil {
+		log.Fatal("Could not create BigQuery Client with error: ", bqerr)
+	}
+
 	return &Subscriber{Client: *pubsubClient, context: ctx, config: config, BQClient: *bqClient}
 }
 

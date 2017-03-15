@@ -38,6 +38,14 @@ Example project to implement the following architecture on GCP:
 - Twitter account
 - Twitter app credentials (https://apps.twitter.com)
 
+## Optional Protocol Buffers 
+
+https://developers.google.com/protocol-buffers/
+
+```bash
+go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
+```
+
 
 Replace <PORT> with the pubsub emulator port number.
 
@@ -88,7 +96,7 @@ export KUBECONFIG=~/.kube/config
 4. Spin up a cluster while we do other things
 
 ```bash
-gcloud container clusters create dius-cluster --zone asia-northeast1-a --num-nodes 2
+gcloud container clusters create dius-cluster --zone asia-northeast1-a --num-nodes 2 --scopes=compute-rw,monitoring,logging-write,storage-rw,bigquery,https://www.googleapis.com/auth/pubsub
 # When that completes run:
 gcloud container clusters get-credentials dius-cluster
 ```
@@ -145,7 +153,7 @@ CGO_ENABLED=0 GOOS=linux go build -a --ldflags="-s" --installsuffix cgo -o publi
 2. Build and tag the Docker images
 
 ```bash
-docker build -t trumplisher:v1 .
+docker build -f PublisherDockerfile -t trumplisher:v1 .
 docker tag trumplisher:v1 asia.gcr.io/PROJECT_ID/trumplisher:v1
 ```
 
@@ -158,6 +166,11 @@ gcloud docker -- push asia.gcr.io/PROJECT_ID/trumplisher:v1
 ```
 
 You can view it on the web console.
+
+## Create the Pub/Sub Topic
+
+1. Navigate to the console and **Enable the API**
+2. Create the *trumpisms* topic
 
 ## Create the BigQuery Table
 
@@ -174,7 +187,28 @@ echo "dataset_id=trump_data" >> ~/.bigqueryrc
 bq mk --schema bq_tweets_schema.json -t trump_data.tweets
 ```
 
+## Deploy Publisher and Subscriber to Kubernetes
+
+1. Modify `publisher.yaml` and `subscriber.yaml` to include the project id in the container to run
+
+2. Deploy the publisher
+
 ```bash
-bq head -n 10 PROJECT_ID:trump_data.tweets
+kubectl create -f publisher.yaml
 ```
 
+3. Deploy the subscriber
+
+```bash
+kubectl create -f subscriber.yaml
+```
+
+## Query Data from CLI
+
+```bash
+bq head -n 10 --format=prettyjson PROJECT_ID:trump_data.tweets
+```
+
+## Write SQL Queries on BigQuery Console
+
+1. Select the tweets table and start writing SQL Queries

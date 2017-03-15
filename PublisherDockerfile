@@ -1,0 +1,17 @@
+FROM scratch
+
+ADD ca-certificates.crt /etc/ssl/certs/
+
+# Run this in Terminal first:
+# CGO_ENABLED=0 GOOS=linux go build -a --ldflags="-s" --installsuffix cgo -o publisher
+
+COPY . /
+
+# Twitter credentials. For workshop purposes only. 
+ENV TWITTER_CONSUMER_KEY <VALUE>
+ENV TWITTER_CONSUMER_SECRET <VALUE>
+ENV TWITTER_ACCESS_TOKEN <VALUE>
+ENV TWITTER_ACCESS_SECRET <VALUE>
+
+WORKDIR /publisher
+ENTRYPOINT ["./publisher"]
