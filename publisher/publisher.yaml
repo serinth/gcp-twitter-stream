@@ -12,4 +12,4 @@ spec:
     spec:
       containers:
       - name: trumplisher
-        image: asia.gcr.io/<PROJECT ID>/trumplisher:v3
+        image: asia.gcr.io/<PROJECT ID>/trumplisher:v1

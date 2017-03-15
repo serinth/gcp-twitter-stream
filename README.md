@@ -72,7 +72,7 @@ gcloud components install kubectl
 gcloud auth application-default login
 
 gcloud config list # See whats there already
-gcloud config set project PROJECT_NAME
+gcloud config set project PROJECT_ID
 
 # gcloud compute regions list
 gcloud config set compute/region asia-northeast1
@@ -139,9 +139,11 @@ This should give you a port # in which pubsub is running
 
 ```bash
 cd publisher
-./start <PORTNUMBER>
+./start.sh <PORTNUMBER>
 ```
 * Note: you may need to modify `start.sh` to reference the executable name
+
+5. Lastly modify the `config/config.json` and put in your Project ID
 
 ## Build the Docker Containers and Push to GCR
 
@@ -155,16 +157,26 @@ CGO_ENABLED=0 GOOS=linux go build -a --ldflags="-s" --installsuffix cgo -o publi
 2. Build and tag the Docker images
 
 ```bash
+cd ..
 docker build -f PublisherDockerfile -t trumplisher:v1 .
 docker tag trumplisher:v1 asia.gcr.io/PROJECT_ID/trumplisher:v1
 ```
+3. Statically link the subscriber
 
-3. Repeat steps 1 and 2 for Subscriber but rename the docker images and use **subscriber** as the Go binary name.
+```bash
+cd subscriber
+CGO_ENABLED=0 GOOS=linux go build -a --ldflags="-s" --installsuffix cgo -o subscriber
+cd ..
+docker build -f SubscriberDockerfile -t trumpscriber:v1 .
+docker tag trumpscriber:v1 asia.gcr.io/PROJECT_ID/trumpscriber:v1
+```
+
 
 4. Push the images to GCR
 
 ```bash
 gcloud docker -- push asia.gcr.io/PROJECT_ID/trumplisher:v1
+gcloud docker -- push asia.gcr.io/PROJECT_ID/trumpscriber:v1
 ```
 
 You can view it on the web console.
