@@ -28,9 +28,6 @@ Example project to implement the following architecture on GCP:
 # Requirements
 
 - Google Cloud SDK and CLI
-  - **beta** component installed
-  - **pubsub-emulator** component installed
-  - **kubectl** component installed
 - Golang 1.7+
 - Docker Native
 - Google Cloud account enabled
@@ -65,8 +62,13 @@ This workshop will cover the following aspects of GCP:
 ```bash
 # Ensure we're logged in and everything is ready to go. Skip init if you've already done it
 gcloud init
-gcloud auth application-default login
 
+# Install extra components for Kubernetes and Pub/Sub emulation
+gcloud components install beta
+gcloud components install pubsub-emulator
+gcloud components install kubectl
+
+gcloud auth application-default login
 
 gcloud config list # See whats there already
 gcloud config set project PROJECT_NAME
