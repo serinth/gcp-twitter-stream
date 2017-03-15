@@ -30,7 +30,6 @@ Example project to implement the following architecture on GCP:
 - Google Cloud SDK and CLI
   - **beta** component installed
   - **pubsub-emulator** component installed
-  - **cloud-datastore-emulator** installed
   - **kubectl** component installed
 - Golang 1.7+
 - Docker Native
@@ -38,7 +37,7 @@ Example project to implement the following architecture on GCP:
 - Twitter account
 - Twitter app credentials (https://apps.twitter.com)
 
-## Optional Protocol Buffers 
+## Optional Install - Protocol Buffers 
 
 https://developers.google.com/protocol-buffers/
 
