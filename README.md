@@ -57,7 +57,8 @@ This workshop will cover the following aspects of GCP:
 ## Getting GCP Ready
 
 1. Log onto GCP and create a new Project
-2. Set the following variables for the default CLI options:
+2. Ensure that `Enable Billing` has been clicked in Billing or Compute Engine
+3. Set the following variables for the default CLI options:
 
 ```bash
 # Ensure we're logged in and everything is ready to go. Skip init if you've already done it
@@ -80,7 +81,7 @@ gcloud config set compute/region asia-northeast1
 gcloud config set compute/zone asia-northeast1-a
 ```
 
-3. Set Kubernetes config
+4. Set Kubernetes config
 
 ```bash
 cd ~
@@ -114,7 +115,7 @@ export TWITTER_ACCESS_TOKEN= ...
 export TWITTER_ACCESS_SECRET= ...
 ```
 
-Also put these values into the `publisher/Dockerfile`.
+Also put these values into the `PublisherDockerfile`.
 
 2. Build locally:
 
