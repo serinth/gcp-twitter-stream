@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: stress-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: stress
+        environment: dev
+    spec:
+      containers:
+      - name: stress
+        image: asia.gcr.io/<PROJECT_ID>/stress:v1

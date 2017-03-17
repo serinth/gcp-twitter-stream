@@ -1,14 +1,13 @@
-# kubectl run publisher --image=asia.gcr.io/trumpisms-160122/trumplisher:v3 --requests=cpu=200m
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: publisher
+  name: stress-scaler
   namespace: default
 spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: publisher
+    name: stress-deployment
   minReplicas: 1
-  maxReplicas: 2
+  maxReplicas: 4
   targetCPUUtilizationPercentage: 50

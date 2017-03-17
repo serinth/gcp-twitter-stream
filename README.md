@@ -226,3 +226,63 @@ bq head -n 10 --format=prettyjson PROJECT_ID:trump_data.tweets
 ## Write SQL Queries on BigQuery Console
 
 1. Select the tweets table and start writing SQL Queries
+
+# Horizontal Pod Autoscaling (more pods)
+
+1. Delete existing resources
+
+a. via CLI:
+
+```bash
+kubectl delete deployment trumplisher-deployment
+kubectl delete deployment trumpscriber-deployment
+gcloud container clusters delete dius-cluster
+```
+
+b. via console:
+- Just go to delete the entire cluster
+
+2. Spin up a new cluster with 1 node and max 2 nodes and enable autoscaling
+
+```bash
+gcloud alpha container clusters create dius-cluster --zone asia-northeast1-a --enable-autoscaling --num-nodes 1 --min-nodes 1 --max-nodes 2 --scopes=compute-rw,monitoring,logging-write,storage-rw,bigquery 
+
+gcloud container clusters get-credentials dius-cluster
+```
+
+# Cluster Scaling (more nodes -- upscaling hardware and access rights)
+
+1. Create a stress application with `StressDockerfile`
+
+```bash
+docker build -f StressDockerfile -t stress:v1 .
+docker tag stress:v1 asia.gcr.io/PROJECT_ID/stress:v1
+gcloud docker -- push asia.gcr.io/PROJECT_ID/stress:v1
+```
+2. Generate some load:
+
+Edit the stress.yaml file to add in your project id then;
+
+```bash
+kubectrl create -f stress.yaml
+```
+
+3. Use `kubectl get nodes` and cloud console to see what happens.
+
+# Horizontal Pod Autoscaling (more pods)
+
+1. Apply horizontal pod autoscaler:
+
+```bash
+kubectl create -f autoscale.yaml
+```
+
+2. Use a combination of:
+
+```bash
+kubectl get pods
+kubectl get deployments
+kubectl get hpa
+```
+
+To see things scale.

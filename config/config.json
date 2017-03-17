@@ -6,7 +6,7 @@
     "track": ["trump"]
   },
   "gcp": {
-    "project": "trumpisms-160122"
+    "project": "PROJECT ID"
   },
   "bigQuery": {
     "datasetId": "trump_data",

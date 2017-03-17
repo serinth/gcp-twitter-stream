@@ -1,0 +1,12 @@
+FROM alpine:edge
+FROM debian:jessie-slim
+
+USER root
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends stress -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+ENTRYPOINT ["stress"]
+CMD ["--cpu", "1", "--vm", "1", "--vm-bytes", "128M"]
