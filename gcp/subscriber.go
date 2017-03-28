@@ -64,33 +64,24 @@ func (s *Subscriber) Subscribe(topic string) {
 
 // ListenAndHandle will start handling the messages in subscription
 func (s *Subscriber) ListenAndHandle() {
-	it, err := s.subcription.Pull(s.context)
-	if err != nil {
-		log.Fatal("Could not get message iterator from subscription")
-	}
-
-	defer it.Stop()
-
-	for {
-		message, err := it.Next()
-
-		if err != nil {
-			break
-		}
+	err := s.subcription.Receive(s.context, func(context context.Context, message *pubsub.Message) {
 
 		tweet := &tweetpb.Tweet{}
 
-		err = proto.Unmarshal(message.Data, tweet)
+		erro := proto.Unmarshal(message.Data, tweet)
 
-		if err != nil {
-			log.Println("Failed to deserialize message: ", err)
+		if erro != nil {
+			log.Println("Failed to deserialize message: ", erro)
 		} else {
 
 			log.Println("Got Message: ", tweet.String())
 			s.insertRow(tweet)
 		}
 
-		message.Done(true)
+		message.Ack()
+	})
+	if err != nil {
+		log.Fatal("Could not get message iterator from subscription")
 	}
 }
 
